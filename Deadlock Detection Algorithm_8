@@ -1,0 +1,71 @@
+#include <stdio.h>
+
+int main() {
+    int allocation[10][10], request[10][10], available[10], work[10], finish[10];
+    int n, m, i, j, k, found;
+
+    printf("--- DEADLOCK DETECTION ALGORITHM ---
+");
+    printf("Enter Number of Processes: "); 
+    scanf("%d", &n);
+    printf("Enter Number of Resource Types: "); 
+    scanf("%d", &m);
+
+    printf("
+Enter Allocation Matrix (%dx%d):
+", n, m);
+    for(i = 0; i < n; i++)
+        for(j = 0; j < m; j++) 
+            scanf("%d", &allocation[i][j]);
+
+    printf("
+Enter Request Matrix (%dx%d):
+", n, m);
+    for(i = 0; i < n; i++)
+        for(j = 0; j < m; j++) 
+            scanf("%d", &request[i][j]);
+
+    printf("
+Enter Available Resources (%d values):
+", m);
+    for(i = 0; i < m; i++) {
+        scanf("%d", &available[i]);
+        work[i] = available[i];
+    }
+    
+    for(i = 0; i < n; i++) finish[i] = 0;
+
+    do {
+        found = 0;
+        for(i = 0; i < n; i++) {
+            if(finish[i] == 0) {
+                for(j = 0; j < m; j++) {
+                    if(request[i][j] > work[j]) break;
+                }
+                if(j == m) {
+                    for(k = 0; k < m; k++) work[k] += allocation[i][k];
+                    finish[i] = 1;
+                    found = 1;
+                }
+            }
+        }
+    } while(found);
+
+    found = 0;
+    printf("
+Deadlock Analysis Result:
+");
+    for(i = 0; i < n; i++) {
+        if(finish[i] == 0) {
+            printf("Process P%d is in DEADLOCK state!
+", i);
+            found = 1;
+        }
+    }
+    
+    if(found == 0) {
+        printf("Status: NO DEADLOCK DETECTED (All processes completed successfully).
+");
+    }
+    return 0;
+}
