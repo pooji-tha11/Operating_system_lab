@@ -1,0 +1,20 @@
+$ uname -a          # Kernel Info
+$ cat /etc/os-release # OS Details
+$ whoami            # Current User
+$ hostname          # Hostname
+$ lscpu             # CPU Architecture
+$ df -h             # Disk Usage
+
+**shell script**
+#!/bin/bash
+echo "ENTER THREE NUMBERS"
+read a b c
+if [ $a -gt $b ] && [ $a -gt $c ]
+then
+ echo "$a is greater"
+elif [ $b -gt $c ]
+then
+ echo "$b is greater"
+else
+ echo "$c is greater"
+fi
