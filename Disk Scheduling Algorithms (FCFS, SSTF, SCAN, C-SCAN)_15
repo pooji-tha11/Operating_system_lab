@@ -1,0 +1,143 @@
+**fcfs**
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int req[50], n, head, i, seek = 0, diff;
+    
+    printf("--- FCFS DISK SCHEDULING ---\n");
+    printf("Enter Number of Requests: ");
+    scanf("%d", &n);
+    
+    printf("Enter Request Queue:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d", &req[i]);
+    }
+    
+    printf("Enter Initial Head Position: ");
+    scanf("%d", &head);
+
+    printf("\nHead Movement Traversal:\n%d", head);
+    for(i = 0; i < n; i++) {
+        diff = abs(req[i] - head);
+        seek += diff;
+        head = req[i];
+        printf(" -> %d", head);
+    }
+    
+    printf("\n\nTotal Head Movement (Seek Time) = %d Cylinders", seek);
+    printf("\nAverage Seek Time = %.2f Cylinders\n", (float)seek / n);
+    
+    return 0;
+}
+
+
+**sstf**
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int req[50], visited[50] = {0}, n, head, i, count = 0, seek = 0, index, min, distance;
+    
+    printf("--- SSTF DISK SCHEDULING ---\n");
+    printf("Enter Number of Requests: ");
+    scanf("%d", &n);
+    
+    printf("Enter Request Queue:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d", &req[i]);
+    }
+    
+    printf("Enter Initial Head Position: ");
+    scanf("%d", &head);
+
+    printf("\nHead Movement Traversal:\n%d", head);
+    while(count < n) {
+        min = 99999;
+        for(i = 0; i < n; i++) {
+            if(!visited[i]) {
+                distance = abs(req[i] - head);
+                if(distance < min) {
+                    min = distance;
+                    index = i;
+                }
+            }
+        }
+        visited[index] = 1;
+        seek += min;
+        head = req[index];
+        printf(" -> %d", head);
+        count++;
+    }
+    
+    printf("\n\nTotal Head Movement (Seek Time) = %d Cylinders", seek);
+    printf("\nAverage Seek Time = %.2f Cylinders\n", (float)seek / n);
+    
+    return 0;
+}
+
+**scan**
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int req[50], n, head, disk_size, i, j, temp, seek = 0, pos;
+    
+    printf("--- SCAN (ELEVATOR) DISK SCHEDULING ---\n");
+    printf("Enter Total Disk Size (e.g. 200): ");
+    scanf("%d", &disk_size);
+    
+    printf("Enter Number of Requests: ");
+    scanf("%d", &n);
+    
+    printf("Enter Request Queue:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d", &req[i]);
+    }
+    
+    printf("Enter Initial Head Position: ");
+    scanf("%d", &head);
+
+    // Sort request queue in ascending order
+    for(i = 0; i < n - 1; i++) {
+        for(j = i + 1; j < n; j++) {
+            if(req[i] > req[j]) {
+                temp = req[i];
+                req[i] = req[j];
+                req[j] = temp;
+            }
+        }
+    }
+
+    // Locate initial head position
+    pos = 0;
+    while(pos < n && req[pos] < head) {
+        pos++;
+    }
+
+    printf("\nHead Movement Traversal:\n%d", head);
+
+    // Service requests towards the high boundary
+    for(i = pos; i < n; i++) {
+        seek += abs(req[i] - head);
+        head = req[i];
+        printf(" -> %d", head);
+    }
+    
+    // Move to end of disk boundary
+    seek += abs((disk_size - 1) - head);
+    head = disk_size - 1;
+    printf(" -> %d", head);
+
+    // Reverse direction and service remaining requests
+    for(i = pos - 1; i >= 0; i--) {
+        seek += abs(req[i] - head);
+        head = req[i];
+        printf(" -> %d", head);
+    }
+
+    printf("\n\nTotal Head Movement (Seek Time) = %d Cylinders", seek);
+    printf("\nAverage Seek Time = %.2f Cylinders\n", (float)seek / n);
+
+    return 0;
+}
