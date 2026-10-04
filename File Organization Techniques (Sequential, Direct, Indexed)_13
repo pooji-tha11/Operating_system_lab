@@ -1,0 +1,103 @@
+**sequential**
+#include <stdio.h>
+
+struct student {
+    int regno;
+    char name[20];
+};
+
+int main() {
+    FILE *fp;
+    struct student s;
+    
+    printf("--- SEQUENTIAL FILE ORGANIZATION ---
+");
+    fp = fopen("student.dat", "w");
+    printf("Enter Register Number: "); scanf("%d", &s.regno);
+    printf("Enter Student Name: "); scanf("%s", s.name);
+    fprintf(fp, "%d %s
+", s.regno, s.name);
+    fclose(fp);
+    printf("Record written sequentially to student.dat
+");
+
+    fp = fopen("student.dat", "r");
+    fscanf(fp, "%d %s", &s.regno, s.name);
+    printf("
+Retrieved Record:
+Register Number : %d
+Name            : %s
+", s.regno, s.name);
+    fclose(fp);
+    return 0;
+}
+
+**direct**
+#include <stdio.h>
+
+struct student {
+    int regno;
+    char name[20];
+};
+
+int main() {
+    FILE *fp = fopen("random.dat", "wb+");
+    struct student s;
+    
+    printf("--- DIRECT (RANDOM) FILE ORGANIZATION ---
+");
+    printf("Enter Register Number: "); scanf("%d", &s.regno);
+    printf("Enter Student Name: "); scanf("%s", s.name);
+    fwrite(&s, sizeof(s), 1, fp);
+    
+    rewind(fp);
+    fread(&s, sizeof(s), 1, fp);
+    printf("
+Direct Record Retrieved:
+Reg No : %d
+Name   : %s
+", s.regno, s.name);
+    fclose(fp);
+    return 0;
+}
+
+**indexed**
+#include <stdio.h>
+
+struct student {
+    int regno;
+    char name[20];
+};
+
+int main() {
+    struct student s[3];
+    int key, i, found = 0;
+    
+    printf("--- INDEXED FILE ORGANIZATION ---
+");
+    printf("Enter 3 Student Records (RegNo Name):
+");
+    for(i = 0; i < 3; i++) {
+        printf("Record %d: ", i + 1);
+        scanf("%d %s", &s[i].regno, s[i].name);
+    }
+    
+    printf("
+Enter Register Number to Search: "); 
+    scanf("%d", &key);
+    
+    for(i = 0; i < 3; i++) {
+        if(s[i].regno == key) {
+            printf("
+Record Found via Index Table:
+Reg No : %d
+Name   : %s
+", s[i].regno, s[i].name);
+            found = 1;
+            break;
+        }
+    }
+    if(!found) printf("Record Not Found in Index Table
+");
+    return 0;
+}
