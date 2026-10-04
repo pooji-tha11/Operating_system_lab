@@ -1,0 +1,150 @@
+**first**
+#include <stdio.h>
+
+int main() {
+    int blockSize[20], processSize[20], allocation[20], nb, np, i, j;
+    
+    printf("--- FIRST FIT MEMORY ALLOCATION ---
+");
+    printf("Enter Number of Blocks: "); scanf("%d", &nb);
+    printf("Enter Number of Processes: "); scanf("%d", &np);
+    
+    printf("Enter Block Sizes:
+");
+    for(i = 0; i < nb; i++) scanf("%d", &blockSize[i]);
+    
+    printf("Enter Process Sizes:
+");
+    for(i = 0; i < np; i++) {
+        scanf("%d", &processSize[i]);
+        allocation[i] = -1;
+    }
+
+    for(i = 0; i < np; i++) {
+        for(j = 0; j < nb; j++) {
+            if(blockSize[j] >= processSize[i]) {
+                allocation[i] = j;
+                blockSize[j] -= processSize[i];
+                break;
+            }
+        }
+    }
+
+    printf("
+Process No	Process Size	Allocated Block
+");
+    for(i = 0; i < np; i++) {
+        printf("%d		%d		", i + 1, processSize[i]);
+        if(allocation[i] != -1) 
+            printf("Block %d
+", allocation[i] + 1);
+        else 
+            printf("Not Allocated
+");
+    }
+    return 0;
+}
+
+
+**best**
+#include <stdio.h>
+
+int main() {
+    int blockSize[20], processSize[20], allocation[20], nb, np, i, j, bestIdx;
+    
+    printf("--- BEST FIT MEMORY ALLOCATION ---
+");
+    printf("Enter Number of Blocks: "); scanf("%d", &nb);
+    printf("Enter Number of Processes: "); scanf("%d", &np);
+    
+    printf("Enter Block Sizes:
+");
+    for(i = 0; i < nb; i++) scanf("%d", &blockSize[i]);
+    
+    printf("Enter Process Sizes:
+");
+    for(i = 0; i < np; i++) {
+        scanf("%d", &processSize[i]);
+        allocation[i] = -1;
+    }
+
+    for(i = 0; i < np; i++) {
+        bestIdx = -1;
+        for(j = 0; j < nb; j++) {
+            if(blockSize[j] >= processSize[i]) {
+                if(bestIdx == -1 || blockSize[j] < blockSize[bestIdx]) 
+                    bestIdx = j;
+            }
+        }
+        if(bestIdx != -1) {
+            allocation[i] = bestIdx;
+            blockSize[bestIdx] -= processSize[i];
+        }
+    }
+
+    printf("
+Process No	Process Size	Allocated Block
+");
+    for(i = 0; i < np; i++) {
+        printf("%d		%d		", i + 1, processSize[i]);
+        if(allocation[i] != -1) 
+            printf("Block %d
+", allocation[i] + 1);
+        else 
+            printf("Not Allocated
+");
+    }
+    return 0;
+}
+
+
+**worst**
+#include <stdio.h>
+
+int main() {
+    int blockSize[20], processSize[20], allocation[20], nb, np, i, j, worstIdx;
+    
+    printf("--- WORST FIT MEMORY ALLOCATION ---
+");
+    printf("Enter Number of Blocks: "); scanf("%d", &nb);
+    printf("Enter Number of Processes: "); scanf("%d", &np);
+    
+    printf("Enter Block Sizes:
+");
+    for(i = 0; i < nb; i++) scanf("%d", &blockSize[i]);
+    
+    printf("Enter Process Sizes:
+");
+    for(i = 0; i < np; i++) {
+        scanf("%d", &processSize[i]);
+        allocation[i] = -1;
+    }
+
+    for(i = 0; i < np; i++) {
+        worstIdx = -1;
+        for(j = 0; j < nb; j++) {
+            if(blockSize[j] >= processSize[i]) {
+                if(worstIdx == -1 || blockSize[j] > blockSize[worstIdx]) 
+                    worstIdx = j;
+            }
+        }
+        if(worstIdx != -1) {
+            allocation[i] = worstIdx;
+            blockSize[worstIdx] -= processSize[i];
+        }
+    }
+
+    printf("
+Process No	Process Size	Allocated Block
+");
+    for(i = 0; i < np; i++) {
+        printf("%d		%d		", i + 1, processSize[i]);
+        if(allocation[i] != -1) 
+            printf("Block %d
+", allocation[i] + 1);
+        else 
+            printf("Not Allocated
+");
+    }
+    return 0;
+}
