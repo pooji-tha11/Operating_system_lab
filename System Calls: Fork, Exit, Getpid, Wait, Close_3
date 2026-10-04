@@ -1,0 +1,63 @@
+**program 1**
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid;
+    pid = fork();
+    
+    if(pid < 0) {
+        printf("Fork Failed!
+");
+        exit(1);
+    }
+    else if(pid == 0) {
+        printf("
+--- CHILD PROCESS ---
+");
+        printf("Child Process ID (PID)   : %d
+", getpid());
+        printf("Parent Process ID (PPID) : %d
+", getppid());
+        exit(0);
+    }
+    else {
+        wait(NULL);
+        printf("
+--- PARENT PROCESS (Resumed after Child Exit) ---
+");
+        printf("Parent Process ID (PID)  : %d
+", getpid());
+        printf("Grandparent PID (Bash)   : %d
+", getppid());
+    }
+    return 0;
+}
+
+**program 2**
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid = fork();
+    
+    if(pid == 0) {
+        printf("Child: Starting computation (sleep 2 seconds)...
+");
+        sleep(2);
+        printf("Child: Computation finished. Exiting.
+");
+        exit(0);
+    } else {
+        printf("Parent: Waiting for child to terminate...
+");
+        wait(NULL);
+        printf("Parent: Child termination detected. Parent exits.
+");
+    }
+    return 0;
+}
