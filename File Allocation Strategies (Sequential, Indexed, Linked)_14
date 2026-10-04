@@ -1,0 +1,70 @@
+**sequential**
+#include <stdio.h>
+
+int main() {
+    int start, length, i;
+    printf("--- SEQUENTIAL FILE ALLOCATION ---
+");
+    printf("Enter Starting Block Number: "); scanf("%d", &start);
+    printf("Enter File Length (Blocks): "); scanf("%d", &length);
+    
+    printf("
+Allocated Contiguous Disk Blocks:
+");
+    for(i = 0; i < length; i++) {
+        printf("Block %d ", start + i);
+    }
+    printf("
+File Allocation Status: Allocated Successfully
+");
+    return 0;
+}
+
+**indexed**
+#include <stdio.h>
+
+int main() {
+    int n, indexBlock, blocks[20], i;
+    printf("--- INDEXED FILE ALLOCATION ---
+");
+    printf("Enter Index Block: "); scanf("%d", &indexBlock);
+    printf("Enter Number of Data Blocks: "); scanf("%d", &n);
+    printf("Enter %d Data Block Numbers:
+", n);
+    for(i = 0; i < n; i++) scanf("%d", &blocks[i]);
+    
+    printf("
+Index Block: %d
+", indexBlock);
+    printf("Mapped Blocks:
+");
+    for(i = 0; i < n; i++) {
+        printf("Index[%d] -> Block %d
+", i, blocks[i]);
+    }
+    return 0;
+}
+
+
+**linked**
+#include <stdio.h>
+
+int main() {
+    int n, blocks[20], i;
+    printf("--- LINKED FILE ALLOCATION ---
+");
+    printf("Enter Number of Blocks: "); scanf("%d", &n);
+    printf("Enter Block Numbers:
+");
+    for(i = 0; i < n; i++) scanf("%d", &blocks[i]);
+    
+    printf("
+Linked Allocation Chain:
+");
+    for(i = 0; i < n - 1; i++) {
+        printf("%d --> ", blocks[i]);
+    }
+    printf("%d --> NULL
+", blocks[n - 1]);
+    return 0;
+}
